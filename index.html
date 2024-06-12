@@ -1,0 +1,73 @@
+﻿﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contractor Monthly Stock Form</title>
+    
+      <link rel="stylesheet" href="styles.css">
+    
+    <script src="script.js"></script>
+</head>
+<body style="background-color:#F0E68C">
+    <div class="form-container">
+        <h1>MONTHLY STOCK REPORT FORM</h1>
+        <form id="combined-form" style="background-color:#BDB76B" action="" method="POST" onsubmit="handleSubmit(event)">
+            <!-- User Info Section -->
+            <h3>USER INFORMATION</h3>
+            <div class="form-group">
+                <label for="username">NAME :-</label>
+                <select id="username" name="username" required onchange="document.getElementById('other-name').style.display = this.value === 'other' ? 'block' : 'none'">
+                    <option label="Choose"></option>
+                    <option value="User 1">User 1</option>
+                    <option value="User 2">User 2</option>
+                    <option value="User 3">विनायक मोहोळ</option>
+                    <option value="other">Other than above</option>
+                </select>
+                <input type="text" id="other-name" name="otherName" style="display:none;" placeholder="Enter the name">
+            </div>
+            <div class="form-group">
+                <label for="date">DATE :-</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+
+            <!-- Known Item Section -->
+            <h3>ITEM VISE ENTRY</h3>
+            <div class="form-group">
+                <label for="known-item">SELECT ITEM :-</label>
+                <select id="known-item" name="knownItem" onchange="document.getElementById('other-item').style.display = this.value === 'other' ? 'block' : 'none'">
+                    <option value="">Select Item</option>
+                    <option value="Item 1">Item 1</option>
+                    <option value="Item 2">Item 2</option>
+                    <option value="other">Other than above</option>
+                </select>
+                <input type="text" id="other-item" name="otherItem" style="display:none;" placeholder="Enter Item Name">
+            </div>
+            <div class="form-group">
+                <label for="known-item-value">VALUE :-</label>
+                <input type="text" id="known-item-value" name="knownItemValue">
+            </div>
+            <button type="button" style="background-color:#000000" id="add-known-item-btn">ADD</button>
+
+            <!-- Dynamic Entry Section -->
+            <h3>PRODUCT VISE ENTRY</h3>
+            <div class="form-group">
+                <label for="productName">Product Name :-</label>
+                <input type="text" id="productName" name="productName" placeholder="Product Name">
+            </div>
+            <div id="fields" class="form-group"></div>
+            <div class="button-group">
+                <button type="button" style="background-color:#000000" id="add-field-btn">ADD FIELD</button>
+                <button type="button" style="background-color:#000000" id="add-entered-item-btn">ADD</button>
+            </div>
+        </form>
+
+        <!-- Entered Items List -->
+        <h3>ADDED ITEM / PRODUCT LIST </h3>
+        <div id="entered-items-list"></div>
+
+        <!-- Submit Button Section -->
+        <button type="submit" style="background-color:#000000" form="combined-form">SUBMIT</button>
+    </div>
+</body>
+</html>

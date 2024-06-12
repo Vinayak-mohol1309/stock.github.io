@@ -1,0 +1,81 @@
+﻿body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 10px;
+            overflow: hidden; /* Prevent body scroll */
+        }
+        h1, h3 {
+            text-align: center;
+            font-size: calc(0.9rem + 0.9vw);
+        }
+        form, #entries, #entered-items-list {
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 100%;
+            margin: 10px auto;
+            overflow: auto;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        label {
+            display: block;
+            /* font-weight: bold; */
+        }
+        select, input[type="text"], input[type="date"], button {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #FFFFFF;
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
+        .field-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+            border: #000000;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        button:hover {
+            background-color: #218838;
+             border-radius: 10px;
+        }
+        .entered-item {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        .action-buttons {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            display: flex;
+            gap: 5px;
+        }
+        .action-buttons button {
+            padding: 5px;
+            font-size: 0.8em;
+            border-radius: 10px;
+        }
+        .form-container {
+            max-height: 90vh;
+            overflow-y: auto;
+             border-radius: 10px;
+            padding-bottom: 20px; /* Space for submit button */
+        }
