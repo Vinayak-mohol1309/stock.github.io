@@ -172,28 +172,29 @@ const handleSubmit = (event) => {
 
     console.log('Data Object:', dataObject);
 
-    // Send data to Google Apps Script
-    const url = "https://script.google.com/macros/s/AKfycbx36ngez_Z7UEXZcU2RYio6nY9tM8mAl1U_5NQrvHbXDXbcBRdl0zq392AzFUCNzY61Zw/exec";
-    const options = {
-        method: 'post',
-        payload: JSON.stringify(dataObject),
-        contentType: 'application/json'
-    };
-
-    // Make POST request to Google Apps Script endpoint
-    const response = UrlFetchApp.fetch(url, options);
-
-    // Handle response
-    const data = JSON.parse(response.getContentText());
-    console.log('Data:', data);
-    if (data.status === 'success') {
+   const xhr = new XMLHttpRequest();
+xhr.open('POST', 'https://script.google.com/macros/s/AKfycbx36ngez_Z7UEXZcU2RYio6nY9tM8mAl1U_5NQrvHbXDXbcBRdl0zq392AzFUCNzY61Zw/exec');
+xhr.setRequestHeader('Content-Type', 'application/json');
+xhr.onreadystatechange = function() {
+  if (xhr.readyState === XMLHttpRequest.DONE) {
+    if (xhr.status === 200) {
+      const data = JSON.parse(xhr.responseText);
+      console.log('Data:', data);
+      if (data.status === 'success') {
         alert('Form submitted successfully.');
         document.getElementById('combined-form').reset();
         document.getElementById('date').value = new Date().toISOString().split('T')[0];
         document.getElementById('entered-items-list').innerHTML = '';
+      } else {
+        throw new Error('Failed to submit form.');
+      }
     } else {
-        alert('Failed to submit form.');
+      alert('Failed to submit the form.');
+      console.error('Error:', xhr.status);
     }
+  }
+};
+xhr.send(JSON.stringify(dataObject)); // Your data to send to the server
 };
 
 
