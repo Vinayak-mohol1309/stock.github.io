@@ -173,7 +173,7 @@ const handleSubmit = (event) => {
     console.log('Data Object:', dataObject);
 
     // Send data to Google Apps Script
-    const url = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL";
+    const url = "https://script.google.com/macros/s/AKfycbx36ngez_Z7UEXZcU2RYio6nY9tM8mAl1U_5NQrvHbXDXbcBRdl0zq392AzFUCNzY61Zw/exec";
     const options = {
         method: 'post',
         payload: JSON.stringify(dataObject),
