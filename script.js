@@ -175,7 +175,7 @@
     // Posting data to the server
     fetch(url, {
         method: 'POST',
-	mode: 'no-cors',
+	mode: 'cors',
         body: JSON.stringify(dataObject),
         headers: {
             'Content-Type': 'application/json'
