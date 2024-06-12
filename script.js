@@ -137,7 +137,7 @@
             button.closest('.entered-item').remove();
         };
 
-       const handleSubmit = (event) => {
+const handleSubmit = (event) => {
     event.preventDefault();
     if (!navigator.onLine) {
         alert('No internet connection.');
@@ -171,35 +171,31 @@
     };
 
     console.log('Data Object:', dataObject);
-    var url = "https://script.google.com/macros/s/AKfycbx36ngez_Z7UEXZcU2RYio6nY9tM8mAl1U_5NQrvHbXDXbcBRdl0zq392AzFUCNzY61Zw/exec";
-    // Posting data to the server
-    fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(dataObject),
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    })
-        .then(response => {
-            console.log('Response:', response);
-            return response.json();
-        })
-        .then(data => {
-            console.log('Data:', data);
-            if (data.status === 'success') {
-                alert('Form submitted successfully.');
-                document.getElementById('combined-form').reset();
-                document.getElementById('date').value = new Date().toISOString().split('T')[0];
-                document.getElementById('entered-items-list').innerHTML = '';
-            } else {
-                throw new Error('Failed to submit form.');
-            }
-        })
-        .catch((error) => {
-            alert('Failed to submit the form.');
-            //console.error('Error:', error);
-        });
+
+    // Send data to Google Apps Script
+    const url = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL";
+    const options = {
+        method: 'post',
+        payload: JSON.stringify(dataObject),
+        contentType: 'application/json'
+    };
+
+    // Make POST request to Google Apps Script endpoint
+    const response = UrlFetchApp.fetch(url, options);
+
+    // Handle response
+    const data = JSON.parse(response.getContentText());
+    console.log('Data:', data);
+    if (data.status === 'success') {
+        alert('Form submitted successfully.');
+        document.getElementById('combined-form').reset();
+        document.getElementById('date').value = new Date().toISOString().split('T')[0];
+        document.getElementById('entered-items-list').innerHTML = '';
+    } else {
+        alert('Failed to submit form.');
+    }
 };
+
 
 
         document.addEventListener('focusin', (event) => {
