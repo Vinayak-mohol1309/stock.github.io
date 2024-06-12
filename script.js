@@ -171,7 +171,7 @@
     };
 
     console.log('Data Object:', dataObject);
-    var url = "https://script.google.com/macros/s/AKfycbz1BWaKnVMjqPf1N3kwjveHZ8nJHOR8mAUhDLEjmoou97pwPOefaxnnPtWpvu94D1P8/exec";
+    var url = "https://script.google.com/macros/s/AKfycbx36ngez_Z7UEXZcU2RYio6nY9tM8mAl1U_5NQrvHbXDXbcBRdl0zq392AzFUCNzY61Zw/exec";
     // Posting data to the server
     fetch(url, {
         method: 'POST',
