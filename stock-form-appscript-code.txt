@@ -1,0 +1,127 @@
+const sheetName = 'Sheet1';
+const scriptProp = PropertiesService.getScriptProperties();
+
+function initialSetup() {
+  const activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  scriptProp.setProperty('key', activeSpreadsheet.getId());
+}
+
+function doPost(e) {
+  const lock = LockService.getScriptLock();
+  lock.tryLock(10000);
+
+  try {
+    const doc = SpreadsheetApp.openById(scriptProp.getProperty('key'));
+    const sheet = doc.getSheetByName(sheetName);
+
+    // Parse the incoming data as JSON
+    const formData = JSON.parse(e.postData.contents);
+
+    // Extract data from the parsed JSON
+    const username = formData.name;
+    const date = formData.date;
+    const enteredItems = formData.enteredItems;
+
+    console.log(username, date, enteredItems);
+
+    // Initialize an array to store all the rows for the entire entry
+    const allRows = [];
+
+    enteredItems.forEach(item => {
+      const itemName = item.itemName;
+
+       item.fields.forEach(field => {
+        // Combine field name and field value into a single string
+        const fieldValue = `${field.name}: ${field.value}`;
+
+        // Construct row data
+        const rowData = [
+          username,
+          date,
+          itemName,
+          fieldValue
+        ];
+
+        // Add the row data to the allRows array
+        allRows.push(rowData);
+      });
+    });
+
+    // Insert the rows into the sheet, starting from the first empty row
+    const startRow = sheet.getLastRow() + 1;
+    sheet.getRange(startRow, 1, allRows.length, allRows[0].length).setValues(allRows);
+     
+      mergeUsernameAndDateColumns();
+
+    const output = {
+      status: 'success'
+    };
+
+    return ContentService.createTextOutput(JSON.stringify(output)).setMimeType(ContentService.MimeType.JSON);
+
+  } catch (error) {
+    const output = {
+      status: 'error',
+      error: error.message
+    };
+
+    Logger.log('Error: ' + error.message);
+    return ContentService.createTextOutput(JSON.stringify(output)).setMimeType(ContentService.MimeType.JSON);
+
+  } finally {
+    lock.releaseLock();
+  }
+}
+//  const sheetId = SpreadsheetApp.openById("1nj2YJY573opwQRXLdq4VkWW4tbh2PgyD1A0KzzFxfgE");
+//   const sheet = sheetId.getSheetByName("Sheet1");
+//   const lastRow = sheet.getLastRow();
+
+function mergeUsernameAndDateColumns() {
+
+  const sheetId = SpreadsheetApp.openById("1DqMTTMera3l4sZDjkeMWosIh5s4P-gytPfjIHyb_b7E");
+  const sheet = sheetId.getSheetByName("Sheet1");
+  const lastRow = sheet.getLastRow();
+
+  if (lastRow < 2) return; // Nothing to merge if there's only one row
+
+  let mergeStartRow = lastRow;
+  let mergeEndRow = lastRow;
+  const usernameColumn = 1; // Assuming username is in the first column
+  const dateColumn = 2; // Assuming date is in the second column
+
+  // Retrieve the username in the last row
+  const username = sheet.getRange(lastRow, usernameColumn).getValue();
+  const date = sheet.getRange(lastRow, dateColumn).getValue();
+
+  // Iterate upwards to find all consecutive rows with the same username
+  for (let row = lastRow - 1; row >= 1; row--) {
+    const currentUsername = sheet.getRange(row, usernameColumn).getValue();
+    if (currentUsername !== username) {
+      break;
+    }
+    mergeStartRow = row;
+  }
+
+  // Merge the username column
+  if (mergeStartRow < mergeEndRow) {
+    sheet.getRange(mergeStartRow, usernameColumn, mergeEndRow - mergeStartRow + 1, 1).mergeVertically();
+    sheet.getRange(mergeStartRow, usernameColumn).setValue(username);
+  }
+
+  // Merge the date column
+  if (mergeStartRow < mergeEndRow) {
+    sheet.getRange(mergeStartRow, dateColumn, mergeEndRow - mergeStartRow + 1, 1).mergeVertically();
+    sheet.getRange(mergeStartRow, dateColumn).setValue(date);
+  }
+}
+
+
+
+function doOptions(e) {
+  return ContentService.createTextOutput('')
+    .setMimeType(ContentService.MimeType.TEXT)
+    .setHeader('Access-Control-Allow-Origin', '*')
+    .setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS')
+    .setHeader('Access-Control-Allow-Headers', 'Content-Type');
+}
+
